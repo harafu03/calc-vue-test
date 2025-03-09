@@ -29,6 +29,7 @@
     <span>{{ first }}</span>
     <span>{{ type }}</span>
     <span>{{ second }}</span>
+    <span v-if="String(res)">=</span>
     <h5>{{ res }}</h5>
   </div>
 </template>
@@ -62,8 +63,8 @@ export default {
       if (!this.first) return;
       if (this.second) {
         this.calcResult();
-        this.second = "";
         this.first = this.res;
+        this.second = "";
         this.res = "";
         this.type = type;
         return;
