@@ -1,26 +1,102 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div>
+    <div>
+      <button v-for="i in 3" :key="i" @click="bindValue(i + 6)">
+        {{ i + 6 }}
+      </button>
+      <button @click="setType('/')">/</button>
+    </div>
+    <div>
+      <button v-for="i in 3" :key="i" @click="bindValue(i + 3)">
+        {{ i + 3 }}
+      </button>
+      <button @click="setType('*')">*</button>
+    </div>
+    <div>
+      <button v-for="i in 3" :key="i" @click="bindValue(i)">{{ i }}</button>
+      <button @click="setType('-')">-</button>
+    </div>
+    <div>
+      <button>&nbsp;</button>
+      <button @click="bindValue(0)">0</button>
+      <button>&nbsp;</button>
+      <button @click="setType('+')">+</button>
+    </div>
+    <button @click="calcResult()">=</button>
+    <button @click="resetCalc()">C</button>
+  </div>
+  <div>
+    <span>{{ first }}</span>
+    <span>{{ type }}</span>
+    <span>{{ second }}</span>
+    <h5>{{ res }}</h5>
+  </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      first: "",
+      type: "",
+      second: "",
+      res: "",
+    };
+  },
+  methods: {
+    resetCalc() {
+      this.first = "";
+      this.type = "";
+      this.second = "";
+      this.res = "";
+    },
+    bindValue(i) {
+      if (this.type) {
+        this.second = parseInt(String(this.second) + String(i));
+      } else {
+        this.first = parseInt(String(this.first) + String(i));
+      }
+    },
+    setType(type) {
+      if (!this.first) return;
+      if (this.second) {
+        this.calcResult();
+        this.second = "";
+        this.first = this.res;
+        this.res = "";
+        this.type = type;
+        return;
+      }
+      if (String(this.res).length > 0) {
+        this.second = "";
+        this.first = this.res;
+      }
+      this.type = type;
+    },
+    calcResult() {
+      switch (this.type) {
+        case "+":
+          this.res = this.first + this.second;
+          break;
+        case "-":
+          this.res = this.first - this.second;
+          break;
+        case "*":
+          this.res = this.first * this.second;
+          break;
+        case "/":
+          this.res = this.first / this.second;
+          break;
+      }
+    },
   },
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+button {
+  margin-right: 2px;
+  padding: 0.5rem;
 }
 </style>
